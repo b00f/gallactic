@@ -9,7 +9,7 @@ LDFLAGS= -ldflags "-X github.com/gallactic/gallactic/version.GitCommit=`git rev-
 CFLAGS=CGO_LDFLAGS="$(SPUTNIKVM_PATH)/c/libsputnikvm.a -ldl"
 
 
-all: tools deps build install test test_release
+all: tools deps build install gtxkey test test_release
 
 ########################################
 ### Tools & dependencies
@@ -38,6 +38,8 @@ build:
 install:
 	$(CFLAGS) go install $(LDFLAGS) $(TAGS) ./cmd/gallactic
 
+gtxkey:
+	$(CFLAGS) go install $(LDFLAGS) $(TAGS) ./cmd/gtxkey
 ########################################
 ### Testing
 test:
