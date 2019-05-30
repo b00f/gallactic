@@ -74,7 +74,7 @@ Loop:
 			var blockHash ETCCommon.Hash
 
 			reqblockNumber := require.BlockNumber().Int64()
-			block, err := tmRPC.Block(&reqblockNumber)
+			block, err := tmRPC.Block(nil, &reqblockNumber)
 			if err == nil {
 				hash := block.Block.Hash().Bytes()
 				blockHash.SetBytes(hash)

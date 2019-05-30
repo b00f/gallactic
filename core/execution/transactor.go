@@ -45,10 +45,10 @@ func (trans *Transactor) BroadcastTxSync(txEnv *txs.Envelope) (*txs.Receipt, err
 	// Subscribe before submitting to mempool
 	txHash := txEnv.Hash()
 	subID := events.GenSubID()
-	out := make(chan interface{}, 1)
 	q := events.QueryForTx(txHash)
 
-	if err := trans.eventBus.Subscribe(ctx, subID, q, out); err != nil {
+	r, err := trans.eventBus.Subscribe(ctx, subID, q)
+	if err != nil {
 		// We do not want to hold the lock with a defer so we must
 		return nil, err
 	}
@@ -64,8 +64,8 @@ func (trans *Transactor) BroadcastTxSync(txEnv *txs.Envelope) (*txs.Receipt, err
 	case <-ctx.Done():
 		return receipt, ctx.Err()
 
-	case msg := <-out:
-		receipt2 := msg.(*txs.Receipt)
+	case msg := <-r.Out():
+		receipt2 := msg.Data().(*txs.Receipt)
 		return receipt2, nil
 	}
 }

@@ -48,7 +48,7 @@ func (ctx *SortitionContext) Execute(txEnv *txs.Envelope, txRec *txs.Receipt) er
 
 	/// Verify the sortition
 	var blockHeight = int64(tx.Height())
-	result, err := tmRPC.Block(&blockHeight)
+	result, err := tmRPC.Block(nil, &blockHeight)
 	if err != nil {
 		return err
 	}

@@ -277,7 +277,7 @@ func (s *blockchainService) GetTx(ctx context.Context, req *pb.TxRequest) (*pb.T
 		return nil, err
 	}
 
-	_tx, err := tmRPC.Tx(hash, false)
+	_tx, err := tmRPC.Tx(nil, hash, false)
 	if err != nil {
 		return nil, err
 	}

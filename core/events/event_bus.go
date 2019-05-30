@@ -14,10 +14,10 @@ const defaultCapacity = 0
 type EventBus interface {
 	Start() error
 	Stop() error
-	Subscribe(ctx context.Context, subscriber string, query tmPubSub.Query, out chan<- interface{}) error
+	Subscribe(ctx context.Context, subscriber string, query tmPubSub.Query) (*tmPubSub.Subscription, error)
 	Unsubscribe(ctx context.Context, subscriber string, query tmPubSub.Query) error
 	UnsubscribeAll(ctx context.Context, subscriber string) error
-	Publish(msg interface{}, tags tmPubSub.TagMap) error
+	Publish(msg interface{}, tags map[string]string) error
 }
 
 // EventBus is a common bus for all events going through the system. All calls
@@ -52,8 +52,8 @@ func (b *eventBus) Stop() error {
 	return b.pubsub.Stop()
 }
 
-func (b *eventBus) Subscribe(ctx context.Context, subscriber string, query tmPubSub.Query, out chan<- interface{}) error {
-	return b.pubsub.Subscribe(ctx, subscriber, query, out)
+func (b *eventBus) Subscribe(ctx context.Context, subscriber string, query tmPubSub.Query) (*tmPubSub.Subscription, error) {
+	return b.pubsub.Subscribe(ctx, subscriber, query)
 }
 
 func (b *eventBus) Unsubscribe(ctx context.Context, subscriber string, query tmPubSub.Query) error {
@@ -64,7 +64,7 @@ func (b *eventBus) UnsubscribeAll(ctx context.Context, subscriber string) error 
 	return b.pubsub.UnsubscribeAll(ctx, subscriber)
 }
 
-func (b *eventBus) Publish(msg interface{}, tags tmPubSub.TagMap) error {
+func (b *eventBus) Publish(msg interface{}, tags map[string]string) error {
 	// no explicit deadline for publishing events
 	ctx := context.Background()
 	b.pubsub.PublishWithTags(ctx, msg, tags)

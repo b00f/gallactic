@@ -66,7 +66,7 @@ func (s *Sortition) Evaluate(blockHeight uint64, blockHash []byte) {
 			return
 		}
 
-		res, err := tmRPC.BroadcastTxAsync(bs)
+		res, err := tmRPC.BroadcastTxAsync(nil, bs)
 		if err != nil {
 			return
 		}

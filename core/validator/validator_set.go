@@ -21,7 +21,7 @@ type validatorListProxy interface {
 type _validatorListProxy struct{}
 
 func (vlp _validatorListProxy) validators(height int64) (*tmRPCTypes.ResultValidators, error) {
-	result, err := tmRPC.Validators(&height)
+	result, err := tmRPC.Validators(nil, &height)
 	if err != nil {
 		return nil, err
 	}
